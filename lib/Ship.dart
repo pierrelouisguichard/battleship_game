@@ -1,6 +1,6 @@
 import 'package:battleship_game/Square.dart';
 
-class Ship {
+abstract class Ship {
   final String _name;
   final int _size;
   late int _health;

@@ -1,0 +1,64 @@
+@startuml test
+set namespaceSeparator ::
+
+class "battleship_game::Board.dart::Board" {
+  -int _height
+  -int _width
+  -List<List<Square>> _board
+  -int _shipsLeft
+  +List<List<Square>> board
+  +void displayBoard()
+  +bool isValidCoordinate()
+  +bool hasAdjacentShip()
+  +bool isValidPlacement()
+  +void placeShipRandomly()
+  +void dropBomb()
+}
+
+class "battleship_game::FailedToPlaceShipException.dart::FailedToPlaceShipException" {
+}
+
+"dart::core::Exception" <|-- "battleship_game::FailedToPlaceShipException.dart::FailedToPlaceShipException"  
+
+class "battleship_game::Ship.dart::Ship" {
+  -String _name
+  -int _size
+  -int _health
+  -List<Square> _position
+  +int size
+  +String getCodeCharacter()
+  +void placeShipOnSquare()
+  +void hit()
+  +void sinkShip()
+  +bool isSunk()
+}
+
+class "battleship_game::Square.dart::Square" {
+  -Ship? _ship
+  -SquareStatus _status
+  +void setSunk()
+  +void setShip()
+  +bool isAlreadyPlayed()
+  +bool hasShip()
+  +void bombSquare()
+  +String getDisplayCharacter()
+}
+
+"battleship_game::Square.dart::Square" o-- "battleship_game::Ship.dart::Ship"
+"battleship_game::Square.dart::Square" o-- "battleship_game::Square.dart::SquareStatus"
+
+class "battleship_game::Square.dart::SquareStatus" {
+  +int index
+  {static} +List<SquareStatus> values
+  {static} +SquareStatus empty
+  {static} +SquareStatus ship
+  {static} +SquareStatus hit
+  {static} +SquareStatus miss
+  {static} +SquareStatus sunk
+}
+
+"battleship_game::Square.dart::SquareStatus" o-- "battleship_game::Square.dart::SquareStatus"
+"dart::core::Enum" <|-- "battleship_game::Square.dart::SquareStatus"
+
+
+@enduml

@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'dart:io';
+import 'dart:math';
 
 import 'package:battleship_game/Ship.dart';
 import 'package:battleship_game/Square.dart';
@@ -35,30 +36,59 @@ class Board {
     }
   }
 
+  bool isValidCoordinate(int row, int col) {
+    return row >= 0 && row < _height && col >= 0 && col < _width;
+  }
+
+  bool hasAdjacentShip(int row, int col) {
+    for (int i = row - 1; i <= row + 1; i++) {
+      for (int j = col - 1; j <= col + 1; j++) {
+        if (isValidCoordinate(i, j) && _board[i][j].hasShip()) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  bool isValidPlacement(Ship ship, int row, int col, bool isHorizontal) {
+    for (int i = 0; i < ship.size; i++) {
+      int newRow = isHorizontal ? row : row + i;
+      int newCol = isHorizontal ? col + i : col;
+      if (!isValidCoordinate(newRow, newCol) ||
+          _board[newRow][newCol].hasShip() ||
+          hasAdjacentShip(newRow, newCol)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  void placeShipRandomly(Ship ship) {
+    final random = Random();
+    int exceptionThreshold = 0;
+    while (true) {
+      final row = random.nextInt(_height);
+      final col = random.nextInt(_width);
+      final isHorizontal = random.nextBool();
+      if (isValidPlacement(ship, row, col, isHorizontal)) {
+        for (int i = 0; i < ship.size; i++) {
+          final square =
+              isHorizontal ? _board[row][col + i] : _board[row + i][col];
+          square.setShip(ship);
+          ship.placeShipOnSquare(square);
+        }
+        _shipsLeft++;
+        return;
+      }
+      if (exceptionThreshold++ > 100) {
+        print("Failed to place ship");
+        break;
+      }
+    }
+  }
+
   void dropBomb(int row, int col) {
     _board[row][col].bombSquare();
   }
-
-  void demoSetUp(Ship ship1, Ship ship2) {
-    _board[0][1].setShip(ship1);
-    _board[1][1].setShip(ship1);
-    _board[2][1].setShip(ship1);
-    _board[4][0].setShip(ship2);
-    _board[4][1].setShip(ship2);
-    _board[4][2].setShip(ship2);
-    _board[4][3].setShip(ship2);
-    dropBomb(0, 1);
-    dropBomb(1, 1);
-    dropBomb(2, 1);
-    dropBomb(3, 1);
-    dropBomb(4, 1);
-  }
-}
-
-void main() {
-  Board b1 = Board(5, 5);
-  Ship s1 = Ship('Submarine', 3);
-  Ship s2 = Ship('Battleship', 4);
-  b1.demoSetUp(s1, s2);
-  b1.displayBoard(true);
 }
