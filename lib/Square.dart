@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_print
-
 import 'package:battleship_game/Outcome.dart';
 import 'package:battleship_game/Ship.dart';
 
@@ -34,10 +32,7 @@ class Square {
   }
 
   Outcome bombSquare() {
-    if (isAlreadyPlayed()) {
-      print("Square already played.");
-    } else if (hasShip()) {
-      print("Hit!");
+    if (hasShip()) {
       _ship!.hit();
       _status = SquareStatus.hit;
       if (_ship.isSunk()) {
@@ -46,7 +41,6 @@ class Square {
       }
       return Outcome(true, null, false);
     }
-    print("Miss!");
     _status = SquareStatus.miss;
     return Outcome(false, null, false);
   }

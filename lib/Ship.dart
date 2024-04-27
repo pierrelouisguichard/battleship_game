@@ -11,6 +11,7 @@ abstract class Ship {
     _health = _size;
   }
 
+  String get name => _name;
   int get size => _size;
 
   String getCodeCharacter() {

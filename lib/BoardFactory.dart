@@ -6,7 +6,7 @@ import 'package:battleship_game/Fleet.dart';
 class BoardFactory {
   Board getBigBoard() {
     Fleet fleet = Fleet(1, 2, 3);
-    Board board = Board(15, 15);
+    Board board = Board(10);
     while (true) {
       try {
         board.placeFleet(fleet);
@@ -23,7 +23,7 @@ class BoardFactory {
 
   Board getSmallBoard() {
     Fleet fleet = Fleet(1, 1, 1);
-    Board board = Board(10, 10);
+    Board board = Board(7);
     while (true) {
       try {
         board.placeFleet(fleet);
@@ -40,7 +40,7 @@ class BoardFactory {
 
   Board getTinyBoard() {
     Fleet fleet = Fleet(0, 0, 1);
-    Board board = Board(5, 5);
+    Board board = Board(5);
     while (true) {
       try {
         board.placeFleet(fleet);

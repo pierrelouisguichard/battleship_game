@@ -1,44 +1,31 @@
-// ignore_for_file: avoid_print
-
-import 'dart:io';
 import 'dart:math';
-
+import 'package:battleship_game/FailedToPlaceShipException.dart';
 import 'package:battleship_game/Fleet.dart';
 import 'package:battleship_game/Outcome.dart';
 import 'package:battleship_game/Ship.dart';
 import 'package:battleship_game/Square.dart';
-import 'package:battleship_game/ships/Battleship.dart';
-import 'package:battleship_game/ships/Destroyer.dart';
-import 'package:battleship_game/ships/Submarine.dart';
 
 class Board {
-  final int _height;
-  final int _width;
+  final int _size;
   late List<List<Square>> _board;
   late int _shipsLeft;
 
+  Square getSquare(int row, int col) {
+    return _board[row][col];
+  }
+
+  int get size => _size;
+  int get shipsLeft => _shipsLeft;
+
   List<List<Square>> get board => _board;
 
-  Board(this._height, this._width) {
-    _board =
-        List.generate(_height, (_) => List.generate(_width, (_) => Square()));
+  Board(this._size) {
+    _board = List.generate(_size, (_) => List.generate(_size, (_) => Square()));
     _shipsLeft = 0;
   }
 
-  void displayBoard(bool showShips) {
-    stdout.write("  ");
-    for (int col = 0; col < _width; col++) {
-      stdout.write("$col ");
-    }
-    print("");
-
-    for (int i = 0; i < _height; i++) {
-      stdout.write("${String.fromCharCode(65 + i)} ");
-      for (int j = 0; j < _width; j++) {
-        stdout.write(_board[i][j].getDisplayCharacter(showShips));
-      }
-      print("");
-    }
+  bool isAlreadyPlayed(int row, int col) {
+    return _board[row][col].isAlreadyPlayed();
   }
 
   void placeFleet(Fleet fleet) {
@@ -49,7 +36,7 @@ class Board {
   }
 
   bool isValidCoordinate(int row, int col) {
-    return row >= 0 && row < _height && col >= 0 && col < _width;
+    return row >= 0 && row < _size && col >= 0 && col < _size;
   }
 
   bool hasAdjacentShip(int row, int col) {
@@ -80,8 +67,8 @@ class Board {
     final random = Random();
     int exceptionThreshold = 0;
     while (true) {
-      final row = random.nextInt(_height);
-      final col = random.nextInt(_width);
+      final row = random.nextInt(_size);
+      final col = random.nextInt(_size);
       final isHorizontal = random.nextBool();
       if (isValidPlacement(ship, row, col, isHorizontal)) {
         for (int i = 0; i < ship.size; i++) {
@@ -94,16 +81,18 @@ class Board {
         return;
       }
       if (exceptionThreshold++ > 100) {
-        print("Failed to place ship");
-        break;
+        throw FailedToPlaceShipException();
       }
     }
   }
 
   Outcome dropBomb(int row, int col) {
     Outcome outcome = _board[row][col].bombSquare();
-    if (_shipsLeft == 0) {
-      outcome.setWon();
+    if (outcome.sunk != null) {
+      _shipsLeft--;
+      if (_shipsLeft == 0) {
+        outcome.setWon();
+      }
     }
     return outcome;
   }
