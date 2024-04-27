@@ -1,16 +1,19 @@
 // ignore_for_file: unused_local_variable
 
 import 'package:battleship_game/Board.dart';
-import 'package:battleship_game/Ship.dart';
-import 'package:battleship_game/ships/Battleship.dart';
+import 'package:battleship_game/BoardFactory.dart';
+import 'package:battleship_game/Fleet.dart';
 
 void main() {
-  Board b1 = Board(5, 5);
+  // Board b1 = Board(10, 10);
 
-  Ship s1 = Battleship();
+  // Fleet fleet = Fleet(3, 3, 3);
 
-  b1.placeShipRandomly(s1);
-  // b1.placeShipRandomly(s2);
+  // b1.placeFleet(fleet);
 
-  b1.displayBoard(true);
+  List<Board> boards = BoardFactory().getBigBoards();
+
+  boards[0].displayBoard(true);
+  print("");
+  boards[0].displayBoard(true);
 }

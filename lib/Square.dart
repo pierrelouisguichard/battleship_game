@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print
 
+import 'package:battleship_game/Outcome.dart';
 import 'package:battleship_game/Ship.dart';
 
 enum SquareStatus { empty, ship, hit, miss, sunk }
@@ -32,7 +33,7 @@ class Square {
     return _status == SquareStatus.ship;
   }
 
-  void bombSquare() {
+  Outcome bombSquare() {
     if (isAlreadyPlayed()) {
       print("Square already played.");
     } else if (hasShip()) {
@@ -41,11 +42,13 @@ class Square {
       _status = SquareStatus.hit;
       if (_ship.isSunk()) {
         _ship.sinkShip();
+        return Outcome(true, _ship, false);
       }
-    } else {
-      print("Miss!");
-      _status = SquareStatus.miss;
+      return Outcome(true, null, false);
     }
+    print("Miss!");
+    _status = SquareStatus.miss;
+    return Outcome(false, null, false);
   }
 
   String getDisplayCharacter(bool showShips) {

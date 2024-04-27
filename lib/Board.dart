@@ -3,8 +3,13 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:battleship_game/Fleet.dart';
+import 'package:battleship_game/Outcome.dart';
 import 'package:battleship_game/Ship.dart';
 import 'package:battleship_game/Square.dart';
+import 'package:battleship_game/ships/Battleship.dart';
+import 'package:battleship_game/ships/Destroyer.dart';
+import 'package:battleship_game/ships/Submarine.dart';
 
 class Board {
   final int _height;
@@ -33,6 +38,13 @@ class Board {
         stdout.write(_board[i][j].getDisplayCharacter(showShips));
       }
       print("");
+    }
+  }
+
+  void placeFleet(Fleet fleet) {
+    List<Ship> ships = fleet.ships;
+    for (Ship ship in ships) {
+      placeShipRandomly(ship);
     }
   }
 
@@ -88,7 +100,11 @@ class Board {
     }
   }
 
-  void dropBomb(int row, int col) {
-    _board[row][col].bombSquare();
+  Outcome dropBomb(int row, int col) {
+    Outcome outcome = _board[row][col].bombSquare();
+    if (_shipsLeft == 0) {
+      outcome.setWon();
+    }
+    return outcome;
   }
 }
