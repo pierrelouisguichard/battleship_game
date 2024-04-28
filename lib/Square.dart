@@ -11,6 +11,9 @@ class Square {
     _status = SquareStatus.empty;
   }
 
+  Ship? get ship => _ship;
+  SquareStatus get status => _status;
+
   void setSunk() {
     _status = SquareStatus.sunk;
   }
@@ -43,24 +46,5 @@ class Square {
     }
     _status = SquareStatus.miss;
     return Outcome(false, null, false);
-  }
-
-  String getDisplayCharacter(bool showShips) {
-    switch (_status) {
-      case SquareStatus.empty:
-        return '~ ';
-      case SquareStatus.ship:
-        if (showShips) {
-          return '${_ship!.getCodeCharacter()} ';
-        } else {
-          return '~ ';
-        }
-      case SquareStatus.hit:
-        return '* ';
-      case SquareStatus.miss:
-        return '\' ';
-      case SquareStatus.sunk:
-        return 'X ';
-    }
   }
 }

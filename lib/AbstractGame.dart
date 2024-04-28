@@ -1,5 +1,4 @@
 import 'package:battleship_game/AbstractPlayer.dart';
-import 'package:battleship_game/Outcome.dart';
 
 abstract class AbstractGame {
   final AbstractPlayer _player1;
@@ -10,7 +9,7 @@ abstract class AbstractGame {
   AbstractGame(this._player1, this._player2) {
     _player1.setOpponent(_player2);
     _player2.setOpponent(_player1);
-    _currentPlayer = _player2;
+    _currentPlayer = _player1;
     _gameOver = false;
   }
 
@@ -23,11 +22,16 @@ abstract class AbstractGame {
     _gameOver = true;
   }
 
-  void playAgain();
+  void playAgain() {
+    setGameOn();
+    setUp();
+  }
 
   void setGameOn() {
     _gameOver = false;
   }
+
+  void setUp();
 
   void startGame();
 
@@ -40,12 +44,11 @@ abstract class AbstractGame {
   }
 
   bool isGameOver() {
-    return _player1.board.shipsLeft == 0 || _player2.board.shipsLeft == 0;
+    if (player1.board.shipsLeft == 0 || player2.board.shipsLeft == 0) {
+      setGameOver();
+    }
+    return player1.board.shipsLeft == 0 || player2.board.shipsLeft == 0;
   }
 
   void takeTurn(int row, int col);
-
-  void displayOutcome(Outcome outcome);
-
-  void displayBothBoards(bool showShips);
 }

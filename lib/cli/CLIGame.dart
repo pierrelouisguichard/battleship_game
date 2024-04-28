@@ -6,6 +6,7 @@ import 'package:battleship_game/AbstractGame.dart';
 import 'package:battleship_game/Board.dart';
 import 'package:battleship_game/BoardFactory.dart';
 import 'package:battleship_game/Outcome.dart';
+import 'package:battleship_game/Square.dart';
 
 class CLIGame extends AbstractGame {
   CLIGame(super.player1, super.player2);
@@ -22,34 +23,13 @@ class CLIGame extends AbstractGame {
     }
   }
 
-  setUp() {
-    print("Choose a board size:");
-    print("1. Tiny Boards");
-    print("2. Small Boards");
-    print("3. Big Boards");
-
-    String? input = stdin.readLineSync();
-    int? choice = int.parse(input!);
-
-    List<Board>? boards;
-
-    switch (choice) {
-      case 1:
-        boards = BoardFactory().getTinyBoards();
-        break;
-      case 2:
-        boards = BoardFactory().getSmallBoards();
-        break;
-      case 3:
-        boards = BoardFactory().getBigBoards();
-        break;
-    }
-
-    player1.setBoard(boards![0]);
+  @override
+  void setUp() {
+    List<Board> boards = BoardFactory().getTinyBoards();
+    player1.setBoard(boards[0]);
     player2.setBoard(boards[1]);
   }
 
-  @override
   void displayOutcome(Outcome outcome) {
     if (outcome.gameWon) {
       print("${currentPlayer.name} WINS!");
@@ -63,7 +43,6 @@ class CLIGame extends AbstractGame {
     }
   }
 
-  @override
   void displayBothBoards(bool showShips) {
     stdout.write("  ");
     for (int col = 0; col < currentPlayer.board.size; col++) {
@@ -79,15 +58,15 @@ class CLIGame extends AbstractGame {
     for (int i = 0; i < currentPlayer.opponent!.board.size; i++) {
       stdout.write("${String.fromCharCode(65 + i)} ");
       for (int j = 0; j < currentPlayer.opponent!.board.size; j++) {
-        stdout.write(currentPlayer.opponent!.board
-            .getSquare(i, j)
-            .getDisplayCharacter(!currentPlayer.isHuman() || showShips));
+        stdout.write(getDisplayCharacter(
+            currentPlayer.opponent!.board.getSquare(i, j),
+            (!currentPlayer.isHuman() || showShips)));
       }
       stdout.write("    ");
       stdout.write("${String.fromCharCode(65 + i)} ");
       for (int j = 0; j < currentPlayer.board.size; j++) {
-        stdout.write(currentPlayer.board.getSquare(i, j).getDisplayCharacter(
-            !currentPlayer.opponent!.isHuman() || showShips));
+        stdout.write(getDisplayCharacter(currentPlayer.board.getSquare(i, j),
+            (!currentPlayer.opponent!.isHuman() || showShips)));
       }
       print("");
     }
@@ -98,18 +77,27 @@ class CLIGame extends AbstractGame {
     Outcome outcome = currentPlayer.opponent!.board.dropBomb(row, col);
     displayOutcome(outcome);
     if (isGameOver()) {
-      setGameOver();
-      if (player1.isHuman()) {
-        player1.promptToPlayAgain(this);
-      } else if (player2.isHuman()) {
-        player2.promptToPlayAgain(this);
-      }
+      player1.promptToPlayAgain(this);
     }
   }
 
-  @override
-  void playAgain() {
-    setGameOn();
-    setUp();
+  String getDisplayCharacter(Square square, bool showShips) {
+    SquareStatus status = square.status;
+    switch (status) {
+      case SquareStatus.empty:
+        return '~ ';
+      case SquareStatus.ship:
+        if (showShips) {
+          return '${square.ship!.getCodeCharacter()} ';
+        } else {
+          return '~ ';
+        }
+      case SquareStatus.hit:
+        return '* ';
+      case SquareStatus.miss:
+        return '\' ';
+      case SquareStatus.sunk:
+        return 'X ';
+    }
   }
 }

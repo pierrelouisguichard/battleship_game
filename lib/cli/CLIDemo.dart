@@ -4,8 +4,6 @@ import 'dart:io';
 
 import 'package:battleship_game/AbstractGame.dart';
 import 'package:battleship_game/AbstractPlayer.dart';
-import 'package:battleship_game/Board.dart';
-import 'package:battleship_game/BoardFactory.dart';
 import 'package:battleship_game/RandomStrategy.dart';
 import 'package:battleship_game/cli/CLIComputerPlayer.dart';
 import 'package:battleship_game/cli/CLIGame.dart';
