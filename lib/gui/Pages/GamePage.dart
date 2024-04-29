@@ -1,22 +1,22 @@
 import 'package:battleship_game/AbstractGame.dart';
-import 'package:battleship_game/gui/BoardWidget.dart';
+import 'package:battleship_game/gui/Pages/HomePage.dart';
+import 'package:battleship_game/gui/Widgets/BoardWidget.dart';
 import 'package:flutter/material.dart';
 
-class WindowWidget extends StatefulWidget {
+class GamePage extends StatefulWidget {
   final AbstractGame game;
-  const WindowWidget({super.key, required this.game});
+  const GamePage({super.key, required this.game});
 
   static String routeName = '/gamePage';
 
   @override
-  State<WindowWidget> createState() => _WindowWidgetState();
+  State<GamePage> createState() => _GamePageState();
 }
 
-class _WindowWidgetState extends State<WindowWidget> {
+class _GamePageState extends State<GamePage> {
   bool _showPopup = false;
 
   void showPopup() {
-    print("here");
     _showPopup = true;
   }
 
@@ -32,12 +32,21 @@ class _WindowWidgetState extends State<WindowWidget> {
     setState(() {});
   }
 
+  void _navigateToHomePage(BuildContext context) {
+    Navigator.pushNamed(context, HomePage.routeName);
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text("Battleship Game"),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
         ),
         body: Stack(
           children: [
@@ -45,7 +54,7 @@ class _WindowWidgetState extends State<WindowWidget> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text(
+                  const Text(
                     "Your Board",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
@@ -57,14 +66,14 @@ class _WindowWidgetState extends State<WindowWidget> {
                       visibleShips: true,
                     ),
                   ),
-                  Text(
+                  const Text(
                     "Opponent's Board",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   IgnorePointer(
-                    ignoring: false,
-                    // !(widget.game.currentPlayer == widget.game.player1 &&
-                    //     !widget.game.gameOver),
+                    ignoring:
+                        !(widget.game.currentPlayer == widget.game.player1 &&
+                            !widget.game.gameOver),
                     child: BoardWidget(
                       game: widget.game,
                       board: widget.game.player2.board,
@@ -78,10 +87,11 @@ class _WindowWidgetState extends State<WindowWidget> {
               left: 20,
               child: Text(
                 "${widget.game.currentPlayer.name}'s turn",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ),
-            Center(
+            const Center(
               child: Text(
                 "...",
                 // "${widget.game.result}",
@@ -98,9 +108,18 @@ class _WindowWidgetState extends State<WindowWidget> {
                           setState(() {
                             _showPopup = false;
                           });
+                          _navigateToHomePage(context);
+                        },
+                        child: const Text("Exit"),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          setState(() {
+                            _showPopup = false;
+                          });
                           widget.game.playAgain();
                         },
-                        child: Text("Play Again"),
+                        child: const Text("Play Again"),
                       ),
                     ],
                   )

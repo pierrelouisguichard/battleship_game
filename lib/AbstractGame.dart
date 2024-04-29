@@ -56,7 +56,7 @@ abstract class AbstractGame {
 
   void takeTurn(int row, int col);
 
-  void setOnGameStateUpdated(void Function() param0) {}
+  void setOnGameStateUpdated(void Function() onUpdate) {}
 
-  void setGameOverPopUp(void Function() param0) {}
+  void setGameOverPopUp(void Function() popUp) {}
 }

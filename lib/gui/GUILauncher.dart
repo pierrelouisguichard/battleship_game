@@ -1,14 +1,14 @@
+import 'package:battleship_game/AbstractGame.dart';
 import 'package:battleship_game/AbstractPlayer.dart';
-import 'package:battleship_game/Board.dart';
 import 'package:battleship_game/RandomStrategy.dart';
 import 'package:battleship_game/firebase_options.dart';
 import 'package:battleship_game/gui/GUIComputerPlayer.dart';
 import 'package:battleship_game/gui/GUIGame.dart';
 import 'package:battleship_game/gui/GUIHumanPlayer.dart';
-import 'package:battleship_game/gui/HomeWidget.dart';
-import 'package:battleship_game/gui/WindowWidget.dart';
-import 'package:battleship_game/gui/createRoomWidget.dart';
-import 'package:battleship_game/gui/join_room.dart';
+import 'package:battleship_game/gui/Pages/CreateRoomPage.dart';
+import 'package:battleship_game/gui/Pages/GamePage.dart';
+import 'package:battleship_game/gui/Pages/HomePage.dart';
+import 'package:battleship_game/gui/Pages/JoinRoomPage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -29,26 +29,20 @@ class App extends StatelessWidget {
       AbstractPlayer player1 = GUIHumanPlayer("Player1");
       AbstractPlayer player2 = GUIComputerPlayer("Computer1", RandomStrategy());
       GUIGame game = GUIGame(player1, player2);
-
-      return WindowWidget(
+      return GamePage(
         game: game,
       );
     }
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       routes: {
-        HomeWidget.routeName: (context) => const HomeWidget(),
-        WindowWidget.routeName: (context) => setUpSinglePlayer(),
-        JoinRoomScreen.routeName: (context) => JoinRoomScreen(),
+        HomePage.routeName: (context) => const HomePage(),
+        GamePage.routeName: (context) => setUpSinglePlayer(),
+        JoinRoomPage.routeName: (context) => JoinRoomPage(),
         CreateRoomScreen.routeName: (context) => CreateRoomScreen(),
-        // BattleshipApp.routeName: (context) => BattleshipApp(),
-        // MultiplayerApp.routeName: (context) => MultiplayerApp(
-        //       roomId: '',
-        //       isTurn: true,
-        //       player: '',
-        //     ),
       },
-      initialRoute: HomeWidget.routeName,
+      initialRoute: HomePage.routeName,
     );
   }
 }

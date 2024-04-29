@@ -1,15 +1,15 @@
-import 'package:battleship_game/gui/WindowWidget.dart';
-import 'package:battleship_game/gui/createRoomWidget.dart';
-import 'package:battleship_game/gui/join_room.dart';
+import 'package:battleship_game/gui/Pages/CreateRoomPage.dart';
+import 'package:battleship_game/gui/Pages/GamePage.dart';
+import 'package:battleship_game/gui/Pages/JoinRoomPage.dart';
 import 'package:flutter/material.dart';
 
-class HomeWidget extends StatelessWidget {
+class HomePage extends StatelessWidget {
   static String routeName = '/main-menu';
 
-  const HomeWidget({Key? key}) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   void _navigateToGamePageApp(BuildContext context) {
-    Navigator.pushNamed(context, WindowWidget.routeName);
+    Navigator.pushNamed(context, GamePage.routeName);
   }
 
   void _navigateToCreateRoom(BuildContext context) {
@@ -17,7 +17,7 @@ class HomeWidget extends StatelessWidget {
   }
 
   void _navigateToJoinRoom(BuildContext context) {
-    Navigator.pushNamed(context, JoinRoomScreen.routeName);
+    Navigator.pushNamed(context, JoinRoomPage.routeName);
   }
 
   @override
@@ -29,7 +29,7 @@ class HomeWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text(
-              'Battle Ship',
+              'Battle Ships',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,

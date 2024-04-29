@@ -1,14 +1,15 @@
-import 'package:battleship_game/gui/waitingRoomWidget.dart';
+import 'package:battleship_game/gui/Pages/WaitingRoomPage.dart';
 import 'package:battleship_game/services/databaseServices.dart';
 import 'package:flutter/material.dart';
 
-class JoinRoomScreen extends StatelessWidget {
+class CreateRoomScreen extends StatelessWidget {
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _roomController = TextEditingController();
-  final DatabaseService _databaseService = DatabaseService();
-  static String routeName = '/join-room';
 
-  JoinRoomScreen({Key? key}) : super(key: key);
+  final DatabaseService _databaseService = DatabaseService();
+
+  static String routeName = '/create-room';
+
+  CreateRoomScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,10 +27,8 @@ class JoinRoomScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text(
-              'Join Room',
-              style: TextStyle(
-                fontSize: 24,
-              ),
+              'Create Room',
+              style: TextStyle(fontSize: 24),
             ),
             const SizedBox(height: 20),
             SizedBox(
@@ -41,30 +40,14 @@ class JoinRoomScreen extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
-            SizedBox(
-              width: 300,
-              child: TextField(
-                controller: _roomController,
-                decoration: const InputDecoration(
-                  hintText: 'Enter Game ID',
-                ),
-              ),
-            ),
             const SizedBox(height: 40),
             ElevatedButton(
               onPressed: () async {
-                String? roomId = await _databaseService.joinRoom(
-                    _roomController.text, _nameController.text);
-                if (roomId != null) {
-                  print('Joined room with ID: ${_roomController.text}');
-
-                  _navigateToRoomScreen(context, roomId, _nameController.text);
-                } else {
-                  print('Room not found');
-                }
+                String roomId =
+                    await _databaseService.createRoom(_nameController.text);
+                _navigateToRoomScreen(context, roomId, _nameController.text);
               },
-              child: const Text('Join'),
+              child: const Text('Create'),
             ),
           ],
         ),
@@ -78,7 +61,7 @@ class JoinRoomScreen extends StatelessWidget {
       context,
       MaterialPageRoute(
           builder: (context) =>
-              GameRoom(roomId: roomId, isTurn: false, player: player)),
+              WaitingRoomPage(roomId: roomId, isTurn: true, player: player)),
     );
   }
 }

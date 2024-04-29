@@ -1,18 +1,17 @@
 import 'package:battleship_game/AbstractPlayer.dart';
-import 'package:battleship_game/gui/GUIGame.dart';
 import 'package:battleship_game/gui/GUIHumanPlayer.dart';
 import 'package:battleship_game/gui/GUIMultiPlayerGame.dart';
-import 'package:battleship_game/gui/WindowWidget.dart';
+import 'package:battleship_game/gui/Pages/GamePage.dart';
 import 'package:battleship_game/services/databaseServices.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class GameRoom extends StatefulWidget {
+class WaitingRoomPage extends StatefulWidget {
   final String roomId;
   bool isTurn;
   final String player;
 
-  GameRoom(
+  WaitingRoomPage(
       {Key? key,
       required this.roomId,
       required this.isTurn,
@@ -20,10 +19,10 @@ class GameRoom extends StatefulWidget {
       : super(key: key);
 
   @override
-  _GameRoomState createState() => _GameRoomState();
+  _WaitingRoomPageState createState() => _WaitingRoomPageState();
 }
 
-class _GameRoomState extends State<GameRoom> {
+class _WaitingRoomPageState extends State<WaitingRoomPage> {
   final DatabaseService _databaseService = DatabaseService();
   late Stream<bool> _roomStream;
   late GUIMultiPlayerGame _game;
@@ -41,9 +40,6 @@ class _GameRoomState extends State<GameRoom> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Room'),
-      ),
       body: StreamBuilder<bool>(
         stream: _roomStream,
         builder: (context, snapshot) {
@@ -54,7 +50,7 @@ class _GameRoomState extends State<GameRoom> {
           } else {
             bool isFull = snapshot.data ?? false;
             return isFull
-                ? WindowWidget(
+                ? GamePage(
                     game: _game,
                   )
                 : _buildWaitingScreen();
@@ -87,7 +83,6 @@ class _GameRoomState extends State<GameRoom> {
               ),
             ],
           ),
-          // You can display more information about the room here
         ],
       ),
     );

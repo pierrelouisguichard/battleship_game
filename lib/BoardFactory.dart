@@ -34,6 +34,10 @@ class BoardFactory {
     }
   }
 
+  Board getSmallBoardNoShips() {
+    return Board(7);
+  }
+
   List<Board> getSmallBoards() {
     return [getSmallBoard(), getSmallBoard()];
   }

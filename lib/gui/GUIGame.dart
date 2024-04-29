@@ -10,10 +10,12 @@ class GUIGame extends AbstractGame {
 
   GUIGame(super.player1, super.player2);
 
+  @override
   void setOnGameStateUpdated(Function() onUpdate) {
     _onGameStateUpdated = onUpdate;
   }
 
+  @override
   void setGameOverPopUp(Function() popUp) {
     _popUp = popUp;
   }

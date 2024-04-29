@@ -1,6 +1,6 @@
 import 'package:battleship_game/AbstractGame.dart';
 import 'package:battleship_game/Board.dart';
-import 'package:battleship_game/gui/SquareWidget.dart';
+import 'package:battleship_game/gui/Widgets/SquareWidget.dart';
 import 'package:flutter/material.dart';
 
 class BoardWidget extends StatefulWidget {

@@ -3,9 +3,7 @@
 import 'dart:io';
 
 import 'package:battleship_game/AbstractGame.dart';
-import 'package:battleship_game/Board.dart';
 import 'package:battleship_game/BoardFactory.dart';
-import 'package:battleship_game/Outcome.dart';
 import 'package:battleship_game/Square.dart';
 
 class CLIGame extends AbstractGame {
