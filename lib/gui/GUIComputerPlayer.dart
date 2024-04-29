@@ -17,7 +17,8 @@ class GUIComputerPlayer extends AbstractPlayer {
   }
 
   @override
-  void promptToTakeTurn(AbstractGame game) {
+  void promptToTakeTurn(AbstractGame game) async {
+    await Future.delayed(const Duration(milliseconds: 500));
     List<int> move = _strategy.pickMove(opponent!.board);
     game.takeTurn(move[0], move[1]);
   }

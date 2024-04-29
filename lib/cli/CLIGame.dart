@@ -15,32 +15,19 @@ class CLIGame extends AbstractGame {
   void startGame() async {
     setUp();
     while (!gameOver) {
-      switchPlayer();
-      print('${currentPlayer.name}\'s turn');
+      print("${currentPlayer.name}'s turn");
       displayBothBoards(false);
       currentPlayer.promptToTakeTurn(this);
-      await Future.delayed(const Duration(milliseconds: 100));
+      await Future.delayed(const Duration(milliseconds: 500));
+      switchPlayer();
     }
   }
 
   @override
   void setUp() {
-    List<Board> boards = BoardFactory().getTinyBoards();
+    final boards = BoardFactory().getTinyBoards();
     player1.setBoard(boards[0]);
     player2.setBoard(boards[1]);
-  }
-
-  void displayOutcome(Outcome outcome) {
-    if (outcome.gameWon) {
-      print("${currentPlayer.name} WINS!");
-      displayBothBoards(true);
-    } else if (outcome.sunk != null) {
-      print("${currentPlayer.name} has SUNK a ${outcome.sunk!.name}");
-    } else if (outcome.hit) {
-      print("${currentPlayer.name} has HIT a ship");
-    } else {
-      print("${currentPlayer.name} has missed");
-    }
   }
 
   void displayBothBoards(bool showShips) {
@@ -52,7 +39,6 @@ class CLIGame extends AbstractGame {
     for (int col = 0; col < currentPlayer.board.size; col++) {
       stdout.write("$col ");
     }
-
     print("");
 
     for (int i = 0; i < currentPlayer.opponent!.board.size; i++) {
@@ -74,30 +60,28 @@ class CLIGame extends AbstractGame {
 
   @override
   void takeTurn(int row, int col) {
-    Outcome outcome = currentPlayer.opponent!.board.dropBomb(row, col);
-    displayOutcome(outcome);
+    final outcome = currentPlayer.opponent!.board.dropBomb(row, col);
+    print(displayOutcome(outcome));
     if (isGameOver()) {
       player1.promptToPlayAgain(this);
     }
   }
 
   String getDisplayCharacter(Square square, bool showShips) {
-    SquareStatus status = square.status;
+    final status = square.status;
     switch (status) {
       case SquareStatus.empty:
-        return '~ ';
+        return "~ ";
       case SquareStatus.ship:
-        if (showShips) {
-          return '${square.ship!.getCodeCharacter()} ';
-        } else {
-          return '~ ';
-        }
+        return showShips ? '${square.ship!.getCodeCharacter()} ' : "~ ";
       case SquareStatus.hit:
-        return '* ';
+        return "* ";
       case SquareStatus.miss:
-        return '\' ';
+        return "' ";
       case SquareStatus.sunk:
-        return 'X ';
+        return "X ";
+      default:
+        return "";
     }
   }
 }

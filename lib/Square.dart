@@ -14,6 +14,14 @@ class Square {
   Ship? get ship => _ship;
   SquareStatus get status => _status;
 
+  void setMiss() {
+    _status = SquareStatus.miss;
+  }
+
+  void setHit() {
+    _status = SquareStatus.hit;
+  }
+
   void setSunk() {
     _status = SquareStatus.sunk;
   }

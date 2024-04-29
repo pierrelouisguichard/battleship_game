@@ -1,21 +1,12 @@
-import 'package:battleship_game/AbstractPlayer.dart';
-import 'package:battleship_game/RandomStrategy.dart';
+import 'package:battleship_game/AbstractGame.dart';
 import 'package:battleship_game/gui/BoardWidget.dart';
-import 'package:battleship_game/gui/GUIComputerPlayer.dart';
-import 'package:battleship_game/gui/GUIGame.dart';
-import 'package:battleship_game/gui/GUIHumanPlayer.dart';
 import 'package:flutter/material.dart';
 
-void main() {
-  AbstractPlayer player1 = GUIHumanPlayer("Human");
-  AbstractPlayer player2 = GUIComputerPlayer("Computer", RandomStrategy());
-  GUIGame game = GUIGame(player1, player2);
-  runApp(WindowWidget(game: game));
-}
-
 class WindowWidget extends StatefulWidget {
-  final GUIGame game;
+  final AbstractGame game;
   const WindowWidget({super.key, required this.game});
+
+  static String routeName = '/gamePage';
 
   @override
   State<WindowWidget> createState() => _WindowWidgetState();
@@ -45,12 +36,19 @@ class _WindowWidgetState extends State<WindowWidget> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
+        appBar: AppBar(
+          title: Text("Battleship Game"),
+        ),
         body: Stack(
           children: [
             Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
+                  Text(
+                    "Your Board",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
                   IgnorePointer(
                     ignoring: true,
                     child: BoardWidget(
@@ -59,10 +57,14 @@ class _WindowWidgetState extends State<WindowWidget> {
                       visibleShips: true,
                     ),
                   ),
+                  Text(
+                    "Opponent's Board",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
                   IgnorePointer(
-                    ignoring:
-                        !(widget.game.currentPlayer == widget.game.player1 &&
-                            !widget.game.gameOver),
+                    ignoring: false,
+                    // !(widget.game.currentPlayer == widget.game.player1 &&
+                    //     !widget.game.gameOver),
                     child: BoardWidget(
                       game: widget.game,
                       board: widget.game.player2.board,
@@ -72,10 +74,24 @@ class _WindowWidgetState extends State<WindowWidget> {
                 ],
               ),
             ),
+            Positioned(
+              left: 20,
+              child: Text(
+                "${widget.game.currentPlayer.name}'s turn",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+            ),
+            Center(
+              child: Text(
+                "...",
+                // "${widget.game.result}",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+            ),
             _showPopup
                 ? AlertDialog(
-                    title: Text("Game Over"),
-                    content: Text("Play Again?"),
+                    title: Text(
+                        "Game Over, ${widget.game.currentPlayer.name} Won!"),
                     actions: [
                       TextButton(
                         onPressed: () {
@@ -84,7 +100,7 @@ class _WindowWidgetState extends State<WindowWidget> {
                           });
                           widget.game.playAgain();
                         },
-                        child: Text("Close"),
+                        child: Text("Play Again"),
                       ),
                     ],
                   )
