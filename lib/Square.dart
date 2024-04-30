@@ -42,17 +42,17 @@ class Square {
     return _status == SquareStatus.ship;
   }
 
-  Outcome bombSquare() {
+  Outcome bombSquare(int row, int col) {
     if (hasShip()) {
       _ship!.hit();
       _status = SquareStatus.hit;
       if (_ship.isSunk()) {
         _ship.sinkShip();
-        return Outcome(true, _ship, false);
+        return Outcome(row, col, true, _ship, false);
       }
-      return Outcome(true, null, false);
+      return Outcome(row, col, true, null, false);
     }
     _status = SquareStatus.miss;
-    return Outcome(false, null, false);
+    return Outcome(row, col, false, null, false);
   }
 }

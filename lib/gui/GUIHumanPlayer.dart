@@ -1,5 +1,6 @@
 import 'package:battleship_game/AbstractGame.dart';
 import 'package:battleship_game/AbstractPlayer.dart';
+import 'package:battleship_game/Outcome.dart';
 
 class GUIHumanPlayer extends AbstractPlayer {
   GUIHumanPlayer(super.name);
@@ -16,6 +17,11 @@ class GUIHumanPlayer extends AbstractPlayer {
 
   @override
   void promptToPlayAgain(AbstractGame game) {
+    return;
+  }
+
+  @override
+  void sendOutcome(Outcome outcome) {
     return;
   }
 }

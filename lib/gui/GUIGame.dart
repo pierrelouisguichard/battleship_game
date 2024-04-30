@@ -30,6 +30,7 @@ class GUIGame extends AbstractGame {
     Board opponentsBoard = currentPlayer.opponent!.board;
     if (!opponentsBoard.getSquare(row, col).isAlreadyPlayed()) {
       Outcome outcome = opponentsBoard.dropBomb(row, col);
+      currentPlayer.sendOutcome(outcome);
       displayOutcome(outcome, null);
       _onGameStateUpdated();
       _handleEndOfTurn();

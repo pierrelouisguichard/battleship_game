@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:battleship_game/AbstractGame.dart';
 import 'package:battleship_game/AbstractPlayer.dart';
+import 'package:battleship_game/Outcome.dart';
 
 class CLIHumanPlayer extends AbstractPlayer {
   CLIHumanPlayer(super.name);
@@ -45,5 +46,10 @@ class CLIHumanPlayer extends AbstractPlayer {
     if (input.toLowerCase() == 'y') {
       game.playAgain();
     }
+  }
+
+  @override
+  void sendOutcome(Outcome outcome) {
+    // TODO: implement sendOutcome
   }
 }

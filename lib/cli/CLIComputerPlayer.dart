@@ -1,6 +1,7 @@
 import 'package:battleship_game/AbstractGame.dart';
 import 'package:battleship_game/AbstractPlayer.dart';
 import 'package:battleship_game/CPUStrategy.dart';
+import 'package:battleship_game/Outcome.dart';
 
 class CLIComputerPlayer extends AbstractPlayer {
   final CPUStrategy _strategy;
@@ -21,6 +22,11 @@ class CLIComputerPlayer extends AbstractPlayer {
 
   @override
   void promptToPlayAgain(AbstractGame game) {
-    // TODO: implement promptToPlayAgain
+    return;
+  }
+
+  @override
+  void sendOutcome(Outcome outcome) {
+    _strategy.resultOfMove(outcome);
   }
 }

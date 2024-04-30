@@ -87,7 +87,7 @@ class Board {
   }
 
   Outcome dropBomb(int row, int col) {
-    Outcome outcome = _board[row][col].bombSquare();
+    Outcome outcome = _board[row][col].bombSquare(row, col);
     if (outcome.sunk != null) {
       _shipsLeft--;
       if (_shipsLeft == 0) {

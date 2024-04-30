@@ -2,6 +2,7 @@
 
 import 'package:battleship_game/AbstractGame.dart';
 import 'package:battleship_game/Board.dart';
+import 'package:battleship_game/Outcome.dart';
 
 abstract class AbstractPlayer {
   final String _name;
@@ -21,6 +22,8 @@ abstract class AbstractPlayer {
   void setOpponent(AbstractPlayer opponent) {
     _opponent = opponent;
   }
+
+  void sendOutcome(Outcome outcome);
 
   bool isHuman();
 
