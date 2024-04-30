@@ -59,7 +59,8 @@ class CLIGame extends AbstractGame {
   @override
   void takeTurn(int row, int col) {
     final outcome = currentPlayer.opponent!.board.dropBomb(row, col);
-    print(displayOutcome(outcome));
+    displayOutcome(outcome, null);
+    print(result);
     if (isGameOver()) {
       player1.promptToPlayAgain(this);
     }
@@ -68,7 +69,7 @@ class CLIGame extends AbstractGame {
   String getDisplayCharacter(Square square, bool showShips) {
     final status = square.status;
     switch (status) {
-      case SquareStatus.empty:
+      case SquareStatus.water:
         return "~ ";
       case SquareStatus.ship:
         return showShips ? '${square.ship!.getCodeCharacter()} ' : "~ ";
@@ -78,8 +79,6 @@ class CLIGame extends AbstractGame {
         return "' ";
       case SquareStatus.sunk:
         return "X ";
-      default:
-        return "";
     }
   }
 }

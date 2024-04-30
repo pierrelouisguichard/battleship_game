@@ -5,20 +5,33 @@ import 'package:battleship_game/Outcome.dart';
 import 'package:battleship_game/services/databaseServices.dart';
 
 class GUIMultiPlayerGame extends AbstractGame {
-  late Function() _onGameStateUpdated;
-  late Function() _popUp;
+  static const int delayMilliseconds = 250;
   final DatabaseService _databaseService = DatabaseService();
-  late bool turn;
-  late final String roomId;
+  final String roomId;
+  late final Function() _onGameStateUpdated;
+  late final Function() _popUp;
   late bool listenToResponse;
   late bool listenToCords;
   late int row;
   late int col;
 
-  GUIMultiPlayerGame(super._player1, super._player2,
-      {required this.turn, required this.roomId}) {
-    row = 0;
-    col = 0;
+  GUIMultiPlayerGame(super._player1, super._player2, {required this.roomId});
+
+  @override
+  void startGame() {
+    startListeningToResponse();
+    startListeningtoCords();
+    setUp();
+  }
+
+  @override
+  void takeTurn(int row, int col) {
+    if (isMyTurn() && !player2.board.isAlreadyPlayed(row, col)) {
+      this.row = row;
+      this.col = col;
+      sendCords(roomId, row, col);
+      switchPlayer();
+    }
   }
 
   @override
@@ -33,11 +46,11 @@ class GUIMultiPlayerGame extends AbstractGame {
 
   @override
   void setUp() {
-    Board board1 = BoardFactory().getSmallBoard();
-    Board board2 = BoardFactory().getSmallBoardNoShips();
+    Board board1 = BoardFactory().getTinyBoard();
+    Board board2 = BoardFactory().getTinyBoardNoShips();
     player1.setBoard(board1);
     player2.setBoard(board2);
-    if (turn) {
+    if (isMyTurn()) {
       listenToResponse = true;
       listenToCords = false;
     } else {
@@ -49,6 +62,7 @@ class GUIMultiPlayerGame extends AbstractGame {
   void startListeningToResponse() {
     _databaseService.listenForResponse(roomId).listen((response) {
       if (response != null && listenToResponse) {
+        displayOutcome(null, response);
         if (response == "hit") {
           player2.board.getSquare(row, col).setHit();
         } else if (response == "miss") {
@@ -62,7 +76,7 @@ class GUIMultiPlayerGame extends AbstractGame {
         }
         _onGameStateUpdated();
         listenToResponse = false;
-        Future.delayed(const Duration(milliseconds: 250), () {
+        Future.delayed(const Duration(milliseconds: delayMilliseconds), () {
           listenToCords = true;
         });
       }
@@ -72,30 +86,24 @@ class GUIMultiPlayerGame extends AbstractGame {
   void startListeningtoCords() {
     _databaseService.listenForCoordinates(roomId).listen((coordinates) {
       if (coordinates.isNotEmpty && listenToCords) {
-        takeTurn2(coordinates[0], coordinates[1]);
+        opponentTurn(coordinates[0], coordinates[1]);
         listenToCords = false;
-        Future.delayed(const Duration(milliseconds: 500), () {
+        Future.delayed(const Duration(milliseconds: delayMilliseconds), () {
           listenToResponse = true;
-          turn = true;
+          switchPlayer();
+          _onGameStateUpdated();
         });
       }
     });
   }
 
-  @override
-  void startGame() {
-    startListeningToResponse();
-    startListeningtoCords();
-    setUp();
-  }
-
-  void takeTurn2(int row, int col) {
+  void opponentTurn(int row, int col) {
     Outcome outcome = player1.board.dropBomb(row, col);
+    displayOutcome(outcome, null);
     if (outcome.gameWon) {
       sendResponse(roomId, "gameover");
       _popUp();
       _onGameStateUpdated();
-      return;
     } else if (outcome.sunk != null) {
       sendResponse(roomId, "sunk");
     } else if (outcome.hit) {
@@ -103,7 +111,6 @@ class GUIMultiPlayerGame extends AbstractGame {
     } else {
       sendResponse(roomId, "miss");
     }
-    _onGameStateUpdated();
   }
 
   void sendResponse(String roomId, String response) {
@@ -112,15 +119,5 @@ class GUIMultiPlayerGame extends AbstractGame {
 
   void sendCords(String roomId, int row, int column) {
     _databaseService.sendCoordinates(roomId, row, column);
-  }
-
-  @override
-  void takeTurn(int row, int col) {
-    if (turn) {
-      this.row = row;
-      this.col = col;
-      sendCords(roomId, row, col);
-      turn = false;
-    }
   }
 }

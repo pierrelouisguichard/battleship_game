@@ -6,7 +6,6 @@ import 'package:battleship_game/Outcome.dart';
 class GUIGame extends AbstractGame {
   late Function() _onGameStateUpdated;
   late Function() _popUp;
-  String result = "";
 
   GUIGame(super.player1, super.player2);
 
@@ -31,7 +30,7 @@ class GUIGame extends AbstractGame {
     Board opponentsBoard = currentPlayer.opponent!.board;
     if (!opponentsBoard.getSquare(row, col).isAlreadyPlayed()) {
       Outcome outcome = opponentsBoard.dropBomb(row, col);
-      result = displayOutcome(outcome);
+      displayOutcome(outcome, null);
       _onGameStateUpdated();
       _handleEndOfTurn();
     }

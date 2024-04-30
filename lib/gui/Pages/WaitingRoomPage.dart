@@ -33,8 +33,10 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
     _roomStream = _databaseService.roomStatusStream(widget.roomId);
     AbstractPlayer player1 = GUIHumanPlayer("Player1");
     AbstractPlayer player2 = GUIHumanPlayer("Player2");
-    _game = GUIMultiPlayerGame(player1, player2,
-        turn: widget.isTurn, roomId: widget.roomId);
+    _game = GUIMultiPlayerGame(player1, player2, roomId: widget.roomId);
+    if (!widget.isTurn) {
+      _game.startSecond();
+    }
   }
 
   @override

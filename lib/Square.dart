@@ -1,14 +1,14 @@
 import 'package:battleship_game/Outcome.dart';
 import 'package:battleship_game/Ship.dart';
 
-enum SquareStatus { empty, ship, hit, miss, sunk }
+enum SquareStatus { water, ship, hit, miss, sunk }
 
 class Square {
   late final Ship? _ship;
   late SquareStatus _status;
 
   Square() {
-    _status = SquareStatus.empty;
+    _status = SquareStatus.water;
   }
 
   Ship? get ship => _ship;

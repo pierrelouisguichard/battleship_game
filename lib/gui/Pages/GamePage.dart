@@ -86,22 +86,20 @@ class _GamePageState extends State<GamePage> {
             Positioned(
               left: 20,
               child: Text(
-                "${widget.game.currentPlayer.name}'s turn",
+                "${widget.game.currentPlayer == widget.game.player1 ? 'Your' : 'Opponent\'s'} turn",
                 style:
                     const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ),
-            const Center(
+            Center(
               child: Text(
-                "...",
-                // "${widget.game.result}",
+                widget.game.result,
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ),
             _showPopup
                 ? AlertDialog(
-                    title: Text(
-                        "Game Over, ${widget.game.currentPlayer.name} Won!"),
+                    title: Text("Game Over, ${widget.game.result}"),
                     actions: [
                       TextButton(
                         onPressed: () {
