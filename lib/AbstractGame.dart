@@ -23,7 +23,6 @@ abstract class AbstractGame {
   String get result => _result;
 
   void startSecond() {
-    print("starting second");
     _currentPlayer = _player2;
   }
 
@@ -47,7 +46,6 @@ abstract class AbstractGame {
   }
 
   void switchPlayer() {
-    print("SWTICHING");
     _currentPlayer = (_currentPlayer == _player1) ? _player2 : _player1;
   }
 

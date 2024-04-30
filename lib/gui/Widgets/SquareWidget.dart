@@ -21,13 +21,13 @@ class SquareWidget extends StatelessWidget {
   Color determineColour(Square square) {
     switch (square.status) {
       case SquareStatus.water:
-        return Colors.blue;
+        return Colors.grey;
       case SquareStatus.ship:
         return visibleShips ? Colors.green : Colors.grey;
       case SquareStatus.hit:
         return Colors.orange;
       case SquareStatus.miss:
-        return Colors.grey;
+        return Colors.blue;
       case SquareStatus.sunk:
         return Colors.red;
     }

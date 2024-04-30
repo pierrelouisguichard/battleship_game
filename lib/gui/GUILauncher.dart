@@ -1,6 +1,6 @@
-import 'package:battleship_game/AbstractGame.dart';
 import 'package:battleship_game/AbstractPlayer.dart';
 import 'package:battleship_game/RandomStrategy.dart';
+import 'package:battleship_game/SmartStrategy.dart';
 import 'package:battleship_game/firebase_options.dart';
 import 'package:battleship_game/gui/GUIComputerPlayer.dart';
 import 'package:battleship_game/gui/GUIGame.dart';
@@ -26,7 +26,9 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget setUpSinglePlayer() {
-      AbstractPlayer player1 = GUIHumanPlayer("Player1");
+      // AbstractPlayer player1 = GUIHumanPlayer("Player1");
+      AbstractPlayer player1 =
+          GUIComputerPlayer("SmartComputer", SmartStrategy(7));
       AbstractPlayer player2 = GUIComputerPlayer("Computer1", RandomStrategy());
       GUIGame game = GUIGame(player1, player2);
       return GamePage(

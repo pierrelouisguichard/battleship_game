@@ -8,10 +8,10 @@ import 'package:flutter/services.dart';
 
 class WaitingRoomPage extends StatefulWidget {
   final String roomId;
-  bool isTurn;
+  final bool isTurn;
   final String player;
 
-  WaitingRoomPage(
+  const WaitingRoomPage(
       {Key? key,
       required this.roomId,
       required this.isTurn,
@@ -19,7 +19,7 @@ class WaitingRoomPage extends StatefulWidget {
       : super(key: key);
 
   @override
-  _WaitingRoomPageState createState() => _WaitingRoomPageState();
+  State<WaitingRoomPage> createState() => _WaitingRoomPageState();
 }
 
 class _WaitingRoomPageState extends State<WaitingRoomPage> {
